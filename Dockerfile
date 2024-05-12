@@ -11,4 +11,4 @@ COPY target/spring-petclinic-*.jar app.jar
 EXPOSE 8080
 
 # Start the application at container startup
-CMD ["java", "-jar", "-Dspring.profiles.active=mysql", "app.jar"]
+CMD ["sh", "-c", "sleep 20 && java -jar -Dspring.profiles.active=mysql app.jar"]
