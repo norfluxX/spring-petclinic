@@ -1,0 +1,35 @@
+version: '3.8'
+
+networks:
+  my_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.19.0.0/16
+          gateway: 172.19.0.1
+
+services:
+  mysql:
+    image: mysql:8.2
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_USER=petclinic
+      - MYSQL_PASSWORD=petclinic
+      - MYSQL_DATABASE=petclinic
+    volumes:
+      - "./conf.d:/etc/mysql/conf.d:ro"
+    networks:
+      my_network:
+        ipv4_address: 172.19.0.2
+
+  spring-petclinic:
+    image: bhikeshk7/petclinic-app:latest
+    depends_on:
+     - mysql
+    ports:
+     - "8080:8080"
+    networks:
+      my_network:
